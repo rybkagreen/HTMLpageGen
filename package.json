@@ -1,0 +1,13 @@
+{
+    "name": "htmlpagegen",
+    "version": "1.0.0",
+    "description": "HTML page generator with AI integration",
+    "scripts": {
+        "dev": "cd frontend && npm run dev",
+        "build": "cd frontend && npm run build",
+        "start": "cd frontend && npm start",
+        "backend": "cd backend && uvicorn app.main:app --reload"
+    },
+    "dependencies": {},
+    "devDependencies": {}
+}
