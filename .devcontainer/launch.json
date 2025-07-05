@@ -2,124 +2,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug NestJS Application",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceFolder}/dist/main.js",
-            "env": {
-                "NODE_ENV": "development"
-            },
-            "console": "integratedTerminal",
-            "restart": true,
-            "protocol": "inspector",
-            "preLaunchTask": "Build Project"
-        },
-        {
-            "name": "Debug TypeScript with ts-node",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceFolder}/src/main.ts",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register",
-                "-r",
-                "tsconfig-paths/register"
-            ],
-            "env": {
-                "NODE_ENV": "development",
-                "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
-            },
-            "console": "integratedTerminal",
-            "restart": true,
-            "protocol": "inspector",
-            "sourceMaps": true,
-            "cwd": "${workspaceFolder}",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "name": "Debug Jest Tests",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
-            "args": [
-                "--runInBand",
-                "--detectOpenHandles",
-                "--forceExit"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "NODE_ENV": "test"
-            },
-            "cwd": "${workspaceFolder}",
-            "runtimeArgs": [
-                "--inspect-brk"
-            ]
-        },
-        {
-            "name": "Debug Current Test File",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
-            "args": [
-                "${relativeFile}",
-                "--runInBand",
-                "--detectOpenHandles",
-                "--forceExit"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            },
-            "env": {
-                "NODE_ENV": "test"
-            },
-            "cwd": "${workspaceFolder}",
-            "runtimeArgs": [
-                "--inspect-brk"
-            ]
-        },
-        {
-            "name": "Debug Nx Serve",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceFolder}/node_modules/.bin/nx",
-            "args": [
-                "serve",
-                "${input:projectName}",
-                "--inspect"
-            ],
-            "console": "integratedTerminal",
-            "restart": true,
-            "protocol": "inspector",
-            "env": {
-                "NODE_ENV": "development"
-            },
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Attach to Process",
+            "name": "Debug Frontend (Next.js)",
             "type": "node",
             "request": "attach",
             "port": 9229,
-            "restart": true,
-            "localRoot": "${workspaceFolder}",
-            "remoteRoot": "${workspaceFolder}",
-            "protocol": "inspector"
-        }
-    ],
-    "inputs": [
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "presentation": {
+                "group": "frontend",
+                "order": 1
+            },
+            "preLaunchTask": "Start Frontend (Next.js)"
+        },
         {
-            "id": "projectName",
-            "description": "Enter the project name to serve",
-            "default": "api-gateway",
-            "type": "promptString"
+            "name": "Debug Backend (FastAPI)",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "app.main:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--reload"
+            ],
+            "cwd": "${workspaceFolder}/backend",
+            "jinja": true,
+            "justMyCode": true,
+            "presentation": {
+                "group": "backend",
+                "order": 1
+            }
         }
     ]
 }

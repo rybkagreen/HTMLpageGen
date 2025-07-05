@@ -1,0 +1,3 @@
+/*
+This file can be used to initialize the database with some default data.
+*/

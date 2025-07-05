@@ -7,25 +7,17 @@ set -e
 
 echo "🚀 Starting DevContainer Bootstrap Process..."
 
-# Обновление системы
-echo "📦 Updating system packages..."
-sudo apt-get update && sudo apt-get upgrade -y
-
-# Установка дополнительных системных пакетов
-echo "🔧 Installing system dependencies..."
-sudo apt-get install -y \
+# Обновление системы и установка зависимостей
+echo "📦 Updating system packages and installing dependencies..."
+sudo apt-get update && sudo apt-get install -y --no-install-recommends \
     curl \
     wget \
+    git \
     vim \
     htop \
     tree \
     jq \
     unzip \
-    software-properties-common \
-    apt-transport-https \
-    ca-certificates \
-    gnupg \
-    lsb-release \
     build-essential \
     libssl-dev \
     zlib1g-dev \
@@ -38,15 +30,9 @@ sudo apt-get install -y \
     libxml2-dev \
     libxmlsec1-dev \
     libffi-dev \
-    liblzma-dev
-
-# Установка PostgreSQL клиента
-echo "🐘 Installing PostgreSQL client..."
-sudo apt-get install -y postgresql-client
-
-# Установка Redis CLI
-echo "📊 Installing Redis CLI..."
-sudo apt-get install -y redis-tools
+    liblzma-dev \
+    postgresql-client \
+    redis-tools
 
 # Установка и настройка pnpm
 echo "📦 Installing and configuring pnpm..."
@@ -57,63 +43,6 @@ echo 'export PNPM_HOME="/home/vscode/.local/share/pnpm"' >> ~/.bashrc
 echo 'export PATH="$PNPM_HOME:$PATH"' >> ~/.bashrc
 echo 'export PNPM_HOME="/home/vscode/.local/share/pnpm"' >> ~/.zshrc
 echo 'export PATH="$PNPM_HOME:$PATH"' >> ~/.zshrc
-
-# Глобальная установка полезных npm пакетов
-echo "🛠️ Installing global npm packages..."
-npm install -g \
-    @nestjs/cli \
-    prisma \
-    nx \
-    typescript \
-    ts-node \
-    nodemon \
-    pm2 \
-    eslint \
-    prettier \
-    @angular/cli \
-    @vue/cli \
-    create-react-app \
-    vite
-
-# Установка Python пакетов
-echo "🐍 Installing Python packages..."
-pip3 install --user \
-    pipenv \
-    poetry \
-    black \
-    pylint \
-    flake8 \
-    mypy \
-    pytest \
-    jupyter \
-    pandas \
-    numpy \
-    requests \
-    fastapi \
-    uvicorn \
-    pydantic \
-    sqlalchemy \
-    alembic \
-    psycopg2-binary \
-    redis
-
-# Настройка Git (если еще не настроен)
-echo "🔐 Configuring Git..."
-if [ -z "$(git config --global user.name)" ]; then
-    echo "⚠️  Git user.name not set. Please configure it manually:"
-    echo "   git config --global user.name 'Your Name'"
-fi
-
-if [ -z "$(git config --global user.email)" ]; then
-    echo "⚠️  Git user.email not set. Please configure it manually:"
-    echo "   git config --global user.email 'your.email@example.com'"
-fi
-
-# Настройка Git для лучшей работы
-git config --global init.defaultBranch main
-git config --global pull.rebase false
-git config --global core.autocrlf input
-git config --global core.editor "code --wait"
 
 # Создание структуры директорий для проекта
 echo "📁 Creating project directory structure..."

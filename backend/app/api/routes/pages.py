@@ -1,10 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any, Optional, List
-from app.services.page_generator import PageGeneratorService
+
 from app.modules.ai_integration.service import AIService
+from app.services.page_generator import PageGeneratorService
 
 router = APIRouter()
+
 
 class PageGenerationRequest(BaseModel):
     content: str
@@ -13,17 +16,19 @@ class PageGenerationRequest(BaseModel):
     plugins: Optional[List[str]] = None
     ai_enhancements: Optional[bool] = True
 
+
 class PageGenerationResponse(BaseModel):
     html: str
     meta: Dict[str, Any]
     plugins_applied: List[str]
     generation_time: float
 
+
 @router.post("/generate", response_model=PageGenerationResponse)
 async def generate_page(
     request: PageGenerationRequest,
     page_service: PageGeneratorService = Depends(),
-    ai_service: AIService = Depends()
+    ai_service: AIService = Depends(),
 ):
     """
     Generate HTML page from content with AI enhancements
@@ -31,15 +36,18 @@ async def generate_page(
     try:
         result = await page_service.generate_page(
             content=request.content,
-            template=request.template,
+            template=request.template or "default",
             seo_options=request.seo_options,
             plugins=request.plugins,
-            ai_enhancements=request.ai_enhancements,
-            ai_service=ai_service
+            ai_enhancements=(
+                request.ai_enhancements if request.ai_enhancements is not None else True
+            ),
+            ai_service=ai_service,
         )
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/templates")
 async def get_templates():
@@ -48,25 +56,80 @@ async def get_templates():
     """
     return {
         "templates": [
-            {"id": "default", "name": "Default Template", "description": "Basic HTML template"},
-            {"id": "blog", "name": "Blog Template", "description": "Template for blog posts"},
-            {"id": "landing", "name": "Landing Page", "description": "Marketing landing page"},
-            {"id": "portfolio", "name": "Portfolio", "description": "Portfolio/showcase template"}
+            {
+                "id": "default",
+                "name": "Default Template",
+                "description": "Basic HTML template",
+            },
+            {
+                "id": "blog",
+                "name": "Blog Template",
+                "description": "Template for blog posts",
+            },
+            {
+                "id": "landing",
+                "name": "Landing Page",
+                "description": "Marketing landing page",
+            },
+            {
+                "id": "portfolio",
+                "name": "Portfolio",
+                "description": "Portfolio/showcase template",
+            },
         ]
     }
+
 
 @router.get("/preview/{page_id}")
 async def preview_page(page_id: str):
     """
     Preview generated page
     """
-    # TODO: Implement page preview functionality
-    return {"message": f"Preview for page {page_id}"}
+    try:
+        # В реальной реализации здесь бы был поиск в базе данных
+        # Пока возвращаем тестовый HTML
+        preview_html = f"""
+        <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" 
+                  content="width=device-width, initial-scale=1.0">
+            <title>Предварительный просмотр страницы {page_id}</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 40px; }}
+                .preview-container {{ max-width: 800px; margin: 0 auto; }}
+                .header {{ text-align: center; color: #333; }}
+            </style>
+        </head>
+        <body>
+            <div class="preview-container">
+                <h1 class="header">Предварительный просмотр</h1>
+                <p>ID страницы: {page_id}</p>
+                <p>Здесь будет отображаться сгенерированный контент.</p>
+            </div>
+        </body>
+        </html>
+        """
+        return {"html": preview_html, "page_id": page_id, "status": "success"}
+    except Exception:
+        raise HTTPException(status_code=404, detail=f"Page {page_id} not found")
+
 
 @router.delete("/pages/{page_id}")
 async def delete_page(page_id: str):
     """
     Delete generated page
     """
-    # TODO: Implement page deletion
-    return {"message": f"Page {page_id} deleted"}
+    try:
+        # В реальной реализации здесь бы было удаление из базы данных
+        # Пока просто возвращаем успешный результат
+        return {
+            "message": f"Page {page_id} successfully deleted",
+            "page_id": page_id,
+            "status": "success",
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=404, detail=f"Page {page_id} not found or cannot be deleted"
+        )

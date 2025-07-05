@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app.api.routes import pages, ai, seo, plugins
+
+from app.api.routes import ai, pages, plugins, seo
 
 api_router = APIRouter()
 

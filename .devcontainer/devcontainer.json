@@ -1,34 +1,16 @@
 {
-  "name": "AI Construction Ecosystem DevContainer",
+  "name": "HTMLpageGen Development Environment (Codespaces Optimized)",
   "image": "node:lts",
   
   "features": {
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11",
-      "installTools": true,
-      "optimize": true
-    },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "moby": true,
-      "azureDnsAutoDetection": true,
-      "installDockerBuildx": true,
-      "version": "latest",
-      "dockerDashComposeVersion": "v2"
-    },
-    "ghcr.io/devcontainers/features/git:1": {
-      "ppa": true,
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/github-cli:1": {
-      "installDirectlyFromGitHubRelease": true,
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/node:1": {
-      "nodeGypDependencies": true,
-      "installYarnUsingApt": true,
-      "version": "lts",
-      "nvmVersion": "latest"
-    },
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/wxw-matt/devcontainer-features/command_runner:0": {},
+    "ghcr.io/wxw-matt/devcontainer-features/script_runner:0": {},
+    "ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {},
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
       "configureZshAsDefaultShell": true,
@@ -41,35 +23,37 @@
     }
   },
 
+  // Оптимизированный форвардинг портов для Codespaces
   "forwardPorts": [
     3000,
+    8000,
+    5432,
+    6379,
+    8080,
+    8081,
+    9001,
+    6006,
+    9229,
+    5678,
     3001,
     3002,
     3003,
     3004,
-    3005,
-    5432,
-    6379,
-    8080,
-    8081
+    3005
   ],
 
   "portsAttributes": {
     "3000": {
-      "label": "Frontend App",
-      "onAutoForward": "notify"
+      "label": "Frontend (Next.js)",
+      "onAutoForward": "openPreview",
+      "requireLocalPort": false,
+      "protocol": "http"
     },
-    "3001": {
-      "label": "API Gateway",
-      "onAutoForward": "notify"
-    },
-    "3002": {
-      "label": "Auth Service",
-      "onAutoForward": "silent"
-    },
-    "3003": {
-      "label": "Construction Objects Service",
-      "onAutoForward": "silent"
+    "8000": {
+      "label": "Backend API (FastAPI)",
+      "onAutoForward": "notify",
+      "requireLocalPort": false,
+      "protocol": "http"
     },
     "5432": {
       "label": "PostgreSQL Database",
@@ -78,114 +62,31 @@
     "6379": {
       "label": "Redis Cache",
       "onAutoForward": "silent"
+    },
+    "8080": {
+      "label": "PgAdmin",
+      "onAutoForward": "ignore",
+      "protocol": "http"
+    },
+    "6006": {
+      "label": "Storybook",
+      "onAutoForward": "openBrowser",
+      "protocol": "http"
     }
-  },
-
-  "containerEnv": {
-    "NODE_ENV": "development",
-    "SHELL": "/bin/zsh",
-    "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/ez_eco_dev",
-    "REDIS_URL": "redis://localhost:6379",
-    "JWT_SECRET": "dev-jwt-secret-key",
-    "JWT_EXPIRES_IN": "24h"
-  },
-
-  "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
   },
 
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.vscode-typescript-next",
         "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "ms-python.python",
-        "ms-python.pylint",
-        "ms-python.black-formatter",
-        "ms-vscode.vscode-json",
-        "redhat.vscode-yaml",
-        "ms-vscode.vscode-eslint",
         "dbaeumer.vscode-eslint",
-        "ms-vscode.vscode-docker",
-        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.mypy-type-checker",
         "bradlc.vscode-tailwindcss",
-        "ms-vscode.vscode-git-extension-pack",
-        "github.vscode-pull-request-github",
-        "github.copilot",
-        "github.copilot-chat",
-        "ms-vscode.vscode-thunder-client",
-        "humao.rest-client",
-        "prisma.prisma",
-        "bradlc.vscode-tailwindcss",
-        "ms-vscode.vscode-npm-script",
-        "christian-kohler.npm-intellisense",
-        "ms-vscode.vscode-node-azure-pack",
-        "ms-vscode.powershell",
-        "redhat.vscode-xml",
-        "ms-dotnettools.csharp",
-        "ms-vscode.vscode-dotnet-pack",
-        "ms-vscode.cmake-tools",
-        "ms-vscode.cpptools-extension-pack",
-        "formulahendry.auto-rename-tag",
-        "streetsidesoftware.code-spell-checker",
-        "wayou.vscode-todo-highlight",
-        "gruntfuggly.todo-tree",
-        "ms-vscode.vscode-markdown-all-in-one",
-        "shd101wyy.markdown-preview-enhanced",
-        "yzhang.markdown-all-in-one",
-        "aaron-bond.better-comments",
-        "alefragnani.bookmarks",
-        "ms-vscode.vscode-color-highlight",
-        "naumovs.color-highlight",
-        "ms-vscode.vscode-zip-explorer",
-        "hediet.vscode-drawio",
-        "ms-vscode.vscode-hex-editor"
-      ],
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh",
-        "terminal.integrated.profiles.linux": {
-          "zsh": {
-            "path": "/bin/zsh",
-            "args": ["-l"]
-          }
-        },
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit",
-          "source.organizeImports": "explicit"
-        },
-        "typescript.preferences.includePackageJsonAutoImports": "auto",
-        "typescript.suggest.autoImports": true,
-        "javascript.suggest.autoImports": true,
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.linting.enabled": true,
-        "python.linting.pylintEnabled": true,
-        "python.formatting.provider": "black",
-        "files.associations": {
-          "*.prisma": "prisma"
-        },
-        "prisma.showPrismaDataPlatformNotification": false,
-        "git.autofetch": true,
-        "git.enableSmartCommit": true,
-        "explorer.confirmDelete": false,
-        "explorer.confirmDragAndDrop": false,
-        "workbench.iconTheme": "vs-seti",
-        "workbench.colorTheme": "Default Dark+",
-        "editor.tabSize": 2,
-        "editor.insertSpaces": true,
-        "editor.detectIndentation": true,
-        "editor.minimap.enabled": true,
-        "editor.wordWrap": "on",
-        "editor.rulers": [80, 120],
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
-        "emmet.includeLanguages": {
-          "typescript": "html",
-          "javascript": "html"
-        }
-      }
+        "formulahendry.auto-rename-tag"
+      ]
     }
   },
 

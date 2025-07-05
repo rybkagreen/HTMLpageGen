@@ -1,0 +1,26 @@
+# HTMLPageGen Health Check Cron Jobs
+# Add these entries to your crontab with: crontab -e
+
+# Health check every 5 minutes (quiet mode)
+*/5 * * * * /opt/htmlpagegen/scripts/health-check.sh quiet || echo "HTMLPageGen health check failed at $(date)" >> /var/log/htmlpagegen-alerts.log
+
+# Detailed health check every hour with logging
+0 * * * * /opt/htmlpagegen/scripts/health-check.sh >> /var/log/htmlpagegen-health.log 2>&1
+
+# Cleanup old log files weekly (keep last 30 days)
+0 2 * * 0 find /var/log -name "htmlpagegen-*.log" -mtime +30 -delete
+
+# Send weekly health summary report
+0 9 * * 1 /opt/htmlpagegen/scripts/weekly-report.sh
+
+# Backup data daily at 3 AM
+0 3 * * * /opt/htmlpagegen/scripts/backup.sh
+
+# Restart application weekly for maintenance (optional)
+# 0 4 * * 0 systemctl restart htmlpagegen
+
+# Monitor disk space and send alert if > 80%
+*/30 * * * * df -h / | awk 'NR==2 {if(substr($5,1,length($5)-1) > 80) print "High disk usage: " $5 " on " strftime("%Y-%m-%d %H:%M:%S")}' >> /var/log/htmlpagegen-alerts.log
+
+# Monitor memory usage and restart if > 90%
+*/10 * * * * MEM=$(free | grep Mem | awk '{printf "%.0f", ($3/$2) * 100.0}'); if [ "$MEM" -gt 90 ]; then echo "High memory usage: ${MEM}% at $(date)" >> /var/log/htmlpagegen-alerts.log && systemctl restart htmlpagegen; fi

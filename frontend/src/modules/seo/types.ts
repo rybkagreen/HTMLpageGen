@@ -45,7 +45,7 @@ export interface SEOAnalysisResponse {
 
 export interface StructuredDataRequest {
   content_type: 'article' | 'webpage';
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface StructuredDataResponse {

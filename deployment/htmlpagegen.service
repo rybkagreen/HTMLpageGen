@@ -1,0 +1,39 @@
+[Unit]
+Description=HTML Page Generator Production Service
+Documentation=https://github.com/yourusername/HTMLpageGen
+Requires=docker.service
+After=docker.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/htmlpagegen
+ExecStart=/opt/htmlpagegen/scripts/start-production.sh
+ExecStop=/opt/htmlpagegen/scripts/stop-production.sh
+ExecReload=/bin/bash -c '/opt/htmlpagegen/scripts/stop-production.sh && /opt/htmlpagegen/scripts/start-production.sh'
+TimeoutStartSec=300
+TimeoutStopSec=60
+Restart=on-failure
+RestartSec=10
+User=htmlpagegen
+Group=htmlpagegen
+
+# Environment variables
+Environment=ENVIRONMENT=production
+Environment=LOG_LEVEL=INFO
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/htmlpagegen/logs /opt/htmlpagegen/uploads /opt/htmlpagegen/data
+
+# Resource limits
+LimitNOFILE=65536
+MemoryLimit=2G
+
+[Install]
+WantedBy=multi-user.target

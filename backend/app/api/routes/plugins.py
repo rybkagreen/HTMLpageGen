@@ -1,7 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any, List, Optional
-from app.modules.plugins.manager import PluginManager, SEOPlugin, AnalyticsPlugin, SocialMetaPlugin
+
+from app.modules.plugins.manager import (
+    AnalyticsPlugin,
+    PluginManager,
+    SEOPlugin,
+    SocialMetaPlugin,
+)
 
 router = APIRouter()
 
@@ -16,15 +23,18 @@ plugin_manager.loaded_plugins["social"] = SocialMetaPlugin()
 # Enable built-in plugins by default
 plugin_manager.enabled_plugins = ["seo", "analytics", "social"]
 
+
 class PluginProcessRequest(BaseModel):
     content: str
     plugins: Optional[List[str]] = None
     options: Optional[Dict[str, Any]] = None
 
+
 class PluginProcessResponse(BaseModel):
     processed_content: str
     applied_plugins: List[str]
     original_content: str
+
 
 class PluginInfoResponse(BaseModel):
     name: str
@@ -32,8 +42,10 @@ class PluginInfoResponse(BaseModel):
     description: str
     enabled: bool
 
+
 class PluginActionRequest(BaseModel):
     plugin_name: str
+
 
 @router.post("/process", response_model=PluginProcessResponse)
 async def process_content_with_plugins(request: PluginProcessRequest):
@@ -44,16 +56,17 @@ async def process_content_with_plugins(request: PluginProcessRequest):
         processed_content, applied_plugins = plugin_manager.process_content(
             content=request.content,
             plugin_names=request.plugins,
-            options=request.options
+            options=request.options,
         )
-        
+
         return PluginProcessResponse(
             processed_content=processed_content,
             applied_plugins=applied_plugins,
-            original_content=request.content
+            original_content=request.content,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/list")
 async def list_plugins():
@@ -62,8 +75,9 @@ async def list_plugins():
     """
     return {
         "plugins": plugin_manager.list_plugins(),
-        "enabled_plugins": plugin_manager.enabled_plugins
+        "enabled_plugins": plugin_manager.enabled_plugins,
     }
+
 
 @router.get("/info/{plugin_name}", response_model=PluginInfoResponse)
 async def get_plugin_info(plugin_name: str):
@@ -73,8 +87,9 @@ async def get_plugin_info(plugin_name: str):
     plugin_info = plugin_manager.get_plugin_info(plugin_name)
     if not plugin_info:
         raise HTTPException(status_code=404, detail="Plugin not found")
-    
+
     return PluginInfoResponse(**plugin_info)
+
 
 @router.post("/enable")
 async def enable_plugin(request: PluginActionRequest):
@@ -84,8 +99,9 @@ async def enable_plugin(request: PluginActionRequest):
     success = plugin_manager.enable_plugin(request.plugin_name)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to enable plugin")
-    
+
     return {"message": f"Plugin {request.plugin_name} enabled successfully"}
+
 
 @router.post("/disable")
 async def disable_plugin(request: PluginActionRequest):
@@ -95,8 +111,9 @@ async def disable_plugin(request: PluginActionRequest):
     success = plugin_manager.disable_plugin(request.plugin_name)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to disable plugin")
-    
+
     return {"message": f"Plugin {request.plugin_name} disabled successfully"}
+
 
 @router.post("/load")
 async def load_plugin(request: PluginActionRequest):
@@ -106,8 +123,9 @@ async def load_plugin(request: PluginActionRequest):
     success = plugin_manager.load_plugin(request.plugin_name)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to load plugin")
-    
+
     return {"message": f"Plugin {request.plugin_name} loaded successfully"}
+
 
 @router.post("/unload")
 async def unload_plugin(request: PluginActionRequest):
@@ -117,8 +135,9 @@ async def unload_plugin(request: PluginActionRequest):
     success = plugin_manager.unload_plugin(request.plugin_name)
     if not success:
         raise HTTPException(status_code=400, detail="Failed to unload plugin")
-    
+
     return {"message": f"Plugin {request.plugin_name} unloaded successfully"}
+
 
 @router.get("/discover")
 async def discover_plugins():
@@ -127,6 +146,7 @@ async def discover_plugins():
     """
     discovered = plugin_manager.discover_plugins()
     return {"discovered_plugins": discovered}
+
 
 @router.get("/built-in")
 async def get_builtin_plugins():
@@ -139,22 +159,31 @@ async def get_builtin_plugins():
                 "id": "seo",
                 "name": "SEO Enhancer",
                 "description": "Enhances HTML with SEO optimizations",
-                "features": ["Meta viewport", "Charset declaration", "Basic SEO structure"]
+                "features": [
+                    "Meta viewport",
+                    "Charset declaration",
+                    "Basic SEO structure",
+                ],
             },
             {
                 "id": "analytics",
                 "name": "Analytics Injector",
                 "description": "Injects analytics tracking code",
-                "features": ["Google Analytics", "Custom tracking", "Event tracking"]
+                "features": ["Google Analytics", "Custom tracking", "Event tracking"],
             },
             {
                 "id": "social",
                 "name": "Social Meta Tags",
                 "description": "Adds Open Graph and Twitter Card meta tags",
-                "features": ["Open Graph tags", "Twitter Cards", "Social sharing optimization"]
-            }
+                "features": [
+                    "Open Graph tags",
+                    "Twitter Cards",
+                    "Social sharing optimization",
+                ],
+            },
         ]
     }
+
 
 @router.get("/templates")
 async def get_plugin_templates():
@@ -167,10 +196,10 @@ async def get_plugin_templates():
                 "plugin_directory/": {
                     "__init__.py": "Main plugin file",
                     "config.json": "Plugin configuration",
-                    "README.md": "Plugin documentation"
+                    "README.md": "Plugin documentation",
                 }
             },
-            "example_code": '''
+            "example_code": """
 from app.modules.plugins.manager import PluginInterface
 from typing import Dict, Any
 
@@ -187,13 +216,13 @@ class Plugin(PluginInterface):
     def process(self, content: str, options: Dict[str, Any] = None) -> str:
         # Your plugin logic here
         return content
-            ''',
+            """,
             "config_example": {
                 "name": "plugin_name",
                 "version": "1.0.0",
                 "description": "Plugin description",
                 "author": "Plugin author",
-                "dependencies": []
-            }
+                "dependencies": [],
+            },
         }
     }
