@@ -93,12 +93,26 @@ class HealthChecker:
 
     async def check_database(self) -> Dict[str, Any]:
         """Check database connectivity"""
+        import time
+        from app.db.database import SessionLocal
+        
+        start_time = time.time()
         try:
-            # Placeholder for database check
-            # In real app, check actual database connection
-            return {"status": "healthy", "response_time": 0.001}
+            # Test database connection
+            from sqlalchemy import text
+            db = SessionLocal()
+            db.execute(text("SELECT 1"))
+            db.close()
+            
+            response_time = time.time() - start_time
+            return {"status": "healthy", "response_time": round(response_time, 4)}
         except Exception as e:
-            return {"status": "unhealthy", "error": str(e)}
+            response_time = time.time() - start_time
+            return {
+                "status": "unhealthy", 
+                "error": str(e),
+                "response_time": round(response_time, 4)
+            }
 
     async def check_redis(self) -> Dict[str, Any]:
         """Check Redis connectivity"""

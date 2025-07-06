@@ -1,9 +1,10 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.modules.ai_integration.service import AIService
+from app.modules.structured_data.generator import StructuredDataGenerator
 
 router = APIRouter()
 
@@ -52,6 +53,32 @@ class ProviderInfoResponse(BaseModel):
     provider: str
     configured: bool
     ai_provider_setting: str
+
+
+class StructuredDataRequest(BaseModel):
+    content: str
+    schema_type: str  # faq, product, breadcrumb, article, organization
+    data: Optional[Dict[str, Any]] = None
+    auto_extract: bool = True
+
+
+class StructuredDataResponse(BaseModel):
+    schema_data: Dict[str, Any]
+    schema_type: str
+    json_ld: str
+
+
+class StructuredDataInjectionRequest(BaseModel):
+    html: str
+    schema_types: Optional[List[str]] = None
+    auto_detect: bool = True
+    schema_params: Optional[Dict[str, Dict[str, Any]]] = None
+
+
+class StructuredDataInjectionResponse(BaseModel):
+    html: str
+    schemas_added: int
+    schemas_list: List[str]
 
 
 @router.post("/enhance-content", response_model=ContentEnhancementResponse)
@@ -153,6 +180,99 @@ async def get_provider_info(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/generate-structured-data", response_model=StructuredDataResponse)
+async def generate_structured_data(
+    request: StructuredDataRequest, ai_service: AIService = Depends()
+) -> StructuredDataResponse:
+    """
+    Generate structured data for content
+    """
+    try:
+        structured_data_generator = StructuredDataGenerator(ai_service)
+        
+        schema_data = await structured_data_generator.generate_structured_data(
+            schema_type=request.schema_type,
+            content=request.content,
+            data=request.data,
+            auto_extract=request.auto_extract
+        )
+        
+        # Convert to JSON-LD string
+        import json
+        json_ld = json.dumps(schema_data, ensure_ascii=False, indent=2)
+        
+        return StructuredDataResponse(
+            schema_data=schema_data,
+            schema_type=request.schema_type,
+            json_ld=json_ld
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/inject-structured-data", response_model=StructuredDataInjectionResponse)
+async def inject_structured_data(
+    request: StructuredDataInjectionRequest, ai_service: AIService = Depends()
+) -> StructuredDataInjectionResponse:
+    """
+    Inject structured data into HTML
+    """
+    try:
+        structured_data_generator = StructuredDataGenerator(ai_service)
+        
+        if request.auto_detect:
+            # Auto-detect and generate suitable schemas
+            enhanced_html = await structured_data_generator.auto_generate_for_content(
+                html=request.html,
+                content_type="auto",
+                include_schemas=request.schema_types
+            )
+        else:
+            # Generate specific schemas
+            enhanced_html = request.html
+            schemas_added = 0
+            schemas_list = []
+            
+            if request.schema_types:
+                from bs4 import BeautifulSoup
+                soup = BeautifulSoup(request.html, 'html.parser')
+                text_content = soup.get_text()
+                
+                for schema_type in request.schema_types:
+                    schema_params = request.schema_params.get(schema_type, {}) if request.schema_params else {}
+                    
+                    schema = await structured_data_generator.generate_structured_data(
+                        schema_type=schema_type,
+                        content=text_content,
+                        data=schema_params,
+                        auto_extract=True
+                    )
+                    
+                    if schema:
+                        enhanced_html = structured_data_generator.inject_into_html(enhanced_html, schema)
+                        schemas_added += 1
+                        schemas_list.append(schema_type)
+            
+            # Count schemas in final HTML
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(enhanced_html, 'html.parser')
+            ld_scripts = soup.find_all('script', {'type': 'application/ld+json'})
+            schemas_added = len(ld_scripts)
+        
+        # Count total schemas
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(enhanced_html, 'html.parser')
+        ld_scripts = soup.find_all('script', {'type': 'application/ld+json'})
+        
+        return StructuredDataInjectionResponse(
+            html=enhanced_html,
+            schemas_added=len(ld_scripts),
+            schemas_list=request.schema_types or ["auto-detected"]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/capabilities")
 async def get_ai_capabilities() -> Dict[str, Any]:
     """
@@ -181,10 +301,39 @@ async def get_ai_capabilities() -> Dict[str, Any]:
                 "description": "Rewrite with marketing emphasis",
             },
         ],
+        "structured_data_types": [
+            {
+                "id": "faq",
+                "name": "FAQ Page",
+                "description": "Frequently Asked Questions schema",
+            },
+            {
+                "id": "product",
+                "name": "Product",
+                "description": "Product information schema",
+            },
+            {
+                "id": "breadcrumb",
+                "name": "Breadcrumb",
+                "description": "Navigation breadcrumb schema",
+            },
+            {
+                "id": "article",
+                "name": "Article",
+                "description": "Article/blog post schema",
+            },
+            {
+                "id": "organization",
+                "name": "Organization",
+                "description": "Organization/company schema",
+            },
+        ],
         "features": [
             "Content enhancement",
             "Meta tag generation",
             "HTML improvement suggestions",
             "SEO optimization",
+            "Structured data generation",
+            "Schema.org JSON-LD injection",
         ],
     }

@@ -117,15 +117,12 @@ export default function HTMLGenerator() {
       if (formData.title && formData.content) {
         try {
           const userInput = `${formData.title}. ${formData.content}`;
-          const analysisResult = await aiAgent.analyzeRequirements(userInput);
+          const analysisResult = await aiAgent.analyzeRequirementsWithAI(userInput);
           setAnalysis(analysisResult);
 
-          // Автоматически обновляем шаблон если анализ предлагает другой
-          if (analysisResult.suggestedTemplate !== formData.template) {
-            setFormData(prev => ({
-              ...prev,
-              template: analysisResult.suggestedTemplate as any,
-            }));
+          // Автоматически обновляем тип контента если анализ предлагает другой
+          if (analysisResult.contentType && analysisResult.contentType !== formData.template) {
+            // Можно добавить логику сопоставления contentType с template
           }
         } catch (error) {
           console.error('Analysis error:', error);
@@ -201,30 +198,18 @@ export default function HTMLGenerator() {
     try {
       if (currentProject) {
         // Обновляем существующий проект
-        currentProject.files[0].content = html;
-        currentProject.files[0].lastModified = new Date();
-        currentProject.updatedAt = new Date();
-        await projectManager.saveProject(currentProject);
+        const updatedProject = projectManager.updateProject(currentProject.id, {
+          htmlContent: html,
+        });
+        setCurrentProject(updatedProject);
       } else {
         // Создаем новый проект
-        const project = await projectManager.createProject({
-          name: formData.title || 'Новый проект',
-          type: 'website',
+        const project = projectManager.createProject(
+          formData.title || 'Новый проект',
+          formData.content.substring(0, 160) || 'Сгенерированная страница',
           html,
-          prompt: `${formData.title}. ${formData.content}`,
-          metadata: {
-            description: formData.content.substring(0, 160),
-            tags: formData.features || [],
-            technologies: ['html', 'css'],
-            difficulty:
-              analysis?.complexity === 'simple'
-                ? 'beginner'
-                : analysis?.complexity === 'complex'
-                  ? 'advanced'
-                  : 'intermediate',
-            estimatedTime: analysis?.estimatedTime || 30,
-          },
-        });
+          formData.features || ['html', 'css']
+        );
         setCurrentProject(project);
       }
     } catch (error) {
@@ -459,24 +444,24 @@ export default function HTMLGenerator() {
                       </span>
                     </div>
                     <div className='flex items-center space-x-4'>
-                      <span className='text-gray-400'>Время:</span>
+                      <span className='text-gray-400'>Тип:</span>
                       <span className='text-blue-300'>
-                        ~{analysis.estimatedTime} мин
+                        {analysis.contentType}
                       </span>
                     </div>
 
-                    {analysis.recommendations.length > 0 && (
+                    {analysis.technologies.length > 0 && (
                       <div className='mt-2'>
                         <span className='text-gray-400 text-xs'>
-                          Рекомендации:
+                          Технологии:
                         </span>
                         <ul className='text-xs text-gray-300 mt-1 space-y-1'>
-                          {analysis.recommendations
+                          {analysis.technologies
                             .slice(0, 3)
-                            .map((rec, i) => (
+                            .map((tech, i) => (
                               <li key={i} className='flex items-start'>
                                 <span className='text-blue-400 mr-1'>•</span>
-                                {rec}
+                                {tech}
                               </li>
                             ))}
                         </ul>

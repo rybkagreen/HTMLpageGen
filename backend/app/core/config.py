@@ -50,7 +50,7 @@ class Settings(BaseSettings):
     # File Upload
     MAX_FILE_SIZE: int = 10485760  # 10MB
     UPLOAD_DIR: str = "./uploads"
-    ALLOWED_FILE_TYPES: List[str] = ["html", "css", "js", "txt", "json"]
+    ALLOWED_FILE_TYPES: str = "html,css,js,txt,json"
 
     # SEO
     DEFAULT_META_TITLE: str = "Generated Page"
@@ -76,6 +76,11 @@ class Settings(BaseSettings):
     # API Documentation
     DOCS_ENABLED: bool = True
     OPENAPI_DOCS_ENABLED: bool = True
+    
+    # Development settings
+    PORT: int = 8000
+    HOST: str = "127.0.0.1"
+    RELOAD: bool = True
 
     @field_validator("SECRET_KEY")
     @classmethod
@@ -109,6 +114,11 @@ class Settings(BaseSettings):
     def enabled_plugins_list(self) -> List[str]:
         """Parse ENABLED_PLUGINS string into list"""
         return [plugin.strip() for plugin in self.ENABLED_PLUGINS.split(",")]
+    
+    @property
+    def allowed_file_types_list(self) -> List[str]:
+        """Parse ALLOWED_FILE_TYPES string into list"""
+        return [file_type.strip() for file_type in self.ALLOWED_FILE_TYPES.split(",")]
 
     model_config = {
         "env_file": ".env",

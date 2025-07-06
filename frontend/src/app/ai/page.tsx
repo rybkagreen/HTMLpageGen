@@ -1,4 +1,4 @@
-import DeepSeekAIPanel from '@/components/ai/DeepSeekAIPanel';
+import HuggingFaceAIPanel from '@/components/ai/HuggingFaceAIPanel';
 import Layout from '@/components/layout/Layout';
 
 export default function AIPage() {
@@ -8,16 +8,16 @@ export default function AIPage() {
         <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='mb-8'>
             <h1 className='text-3xl font-bold text-gray-900'>
-              AI Возможности с DeepSeek
+              AI Возможности с DeepSeek R1
             </h1>
             <p className='mt-2 text-gray-600'>
               Используйте мощные возможности искусственного интеллекта DeepSeek
-              R1 для улучшения контента, генерации HTML и SEO оптимизации.
+              R1 через Hugging Face для создания HTML страниц и веб-разработки.
             </p>
           </div>
 
           <div className='grid gap-8'>
-            <DeepSeekAIPanel />
+            <HuggingFaceAIPanel />
 
             <div className='bg-white rounded-lg shadow-lg p-6'>
               <h3 className='text-lg font-semibold text-gray-900 mb-4'>

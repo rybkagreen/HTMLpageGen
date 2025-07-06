@@ -1,36 +1,190 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HTML Page Generator with AI
 
-## Getting Started
+Интеллектуальный генератор HTML-страниц, использующий возможности искусственного интеллекта через Hugging Face API.
 
-First, run the development server:
+## 🚀 Особенности
 
+- **AI-генерация**: Создание HTML-страниц с помощью модели DeepSeek-R1-Distill-Qwen-14B
+- **Интерактивный чат**: Общение с AI для создания и улучшения кода
+- **Управление проектами**: Сохранение, экспорт и импорт проектов
+- **Предпросмотр в реальном времени**: Мгновенный просмотр результатов
+- **SEO-оптимизация**: Автоматическая генерация мета-тегов
+- **Адаптивный дизайн**: Современные CSS практики и responsive design
+
+## 🛠 Технологии
+
+- **Next.js 15** - React фреймворк
+- **TypeScript** - Типизированный JavaScript
+- **Tailwind CSS** - Utility-first CSS фреймворк
+- **Framer Motion** - Анимации
+- **Hugging Face API** - AI модель через featherless-ai роутер
+- **Monaco Editor** - Редактор кода
+
+## 📦 Установка
+
+1. Клонируйте репозиторий:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Установите зависимости:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Настройте переменные окружения:
+```bash
+cp .env.local.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Обновите `.env.local` с вашим Hugging Face токеном:
+```env
+HF_TOKEN=your_hugging_face_token_here
+```
 
-## Learn More
+4. Запустите проект:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Откройте [http://localhost:3000](http://localhost:3000) в браузере.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 Настройка Hugging Face API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Зарегистрируйтесь на [huggingface.co](https://huggingface.co/)
+2. Перейдите в [настройки токенов](https://huggingface.co/settings/tokens)
+3. Создайте новый токен с правами доступа к API
+4. Скопируйте токен в файл `.env.local`
 
-## Deploy on Vercel
+## 🧪 Тестирование API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Выполните тестовый запрос:
+```bash
+export HF_TOKEN=your_actual_token
+node test-hf-api.js
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Или протестируйте напрямую с помощью curl:
+```bash
+curl https://router.huggingface.co/featherless-ai/v1/chat/completions \
+    -H "Authorization: Bearer $HF_TOKEN" \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "messages": [
+            {
+                "role": "user",
+                "content": "Создай простую HTML страницу"
+            }
+        ],
+        "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+        "stream": false
+    }'
+```
+
+## 📖 Структура проекта
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API роуты
+│   │   ├── huggingface/   # Hugging Face API
+│   │   └── generate/      # Генерация HTML
+│   ├── ai/                # AI чат страница
+│   ├── generator/         # Генератор HTML
+│   └── projects/          # Управление проектами
+├── components/            # React компоненты
+│   ├── ai/               # AI интерфейсы
+│   ├── projects/         # Управление проектами
+│   ├── generator/        # Генератор
+│   └── ui/               # UI компоненты
+└── lib/                  # Библиотеки
+    ├── api.ts            # API функции
+    ├── ai-agent.ts       # AI агент
+    ├── project-manager.ts # Менеджер проектов
+    └── utils.ts          # Утилиты
+```
+
+## 🎯 Возможности
+
+### AI Чат (/ai)
+- Интерактивное общение с DeepSeek R1
+- Быстрые действия для создания страниц
+- Автоматическое извлечение HTML кода
+- Предпросмотр результатов
+
+### Генератор HTML (/generator)
+- Создание страниц по описанию
+- Выбор шаблонов и стилей
+- Живой предпросмотр
+- Экспорт готового кода
+
+### Управление проектами (/projects)
+- Сохранение проектов локально
+- Импорт/экспорт проектов
+- Поиск и фильтрация
+- Статистика использования
+
+## 🔍 API Роуты
+
+- `POST /api/huggingface` - Основной API для работы с AI
+- `POST /api/generate` - Генерация HTML страниц
+
+## 🚀 Сборка и деплой
+
+```bash
+# Сборка проекта
+npm run build
+
+# Запуск production сервера
+npm start
+
+# Линтинг
+npm run lint
+
+# Форматирование
+npm run format
+```
+
+## 📝 Примеры использования
+
+### Создание лендинга
+```
+Создай landing page для IT-компании с услугами веб-разработки, современным дизайном и формой обратной связи
+```
+
+### Портфолио
+```
+Создай портфолио веб-разработчика с разделами о навыках, проектах и контактах
+```
+
+### Корпоративный сайт
+```
+Создай корпоративный сайт консалтинговой компании с информацией об услугах и команде
+```
+
+## ⚡ Производительность
+
+- Время генерации: < 5 секунд
+- Поддержка стриминга ответов
+- Edge Runtime для быстрых API ответов
+- Оптимизированная сборка Next.js
+
+## 🤝 Вклад в проект
+
+1. Форкните репозиторий
+2. Создайте ветку для фичи (`git checkout -b feature/amazing-feature`)
+3. Закоммитьте изменения (`git commit -m 'Add amazing feature'`)
+4. Запушьте ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
+
+## 📄 Лицензия
+
+Проект распространяется под лицензией MIT. См. `LICENSE` для подробной информации.
+
+## 🔗 Полезные ссылки
+
+- [Hugging Face Documentation](https://huggingface.co/docs)
+- [DeepSeek R1 Model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)

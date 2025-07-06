@@ -46,7 +46,7 @@ const KnowledgeSearch = memo(function KnowledgeSearch({
   const performSearch = async (query: string) => {
     setIsSearching(true);
     try {
-      const results = await knowledgeBase.search(query, 6);
+      const results = knowledgeBase.search({ query, limit: 6 });
       setSearchResults(results);
     } catch (error) {
       console.error('Search error:', error);
@@ -55,8 +55,8 @@ const KnowledgeSearch = memo(function KnowledgeSearch({
     }
   };
 
-  const loadRecommendations = async () => {
-    const recs = await knowledgeBase.getRecommendations({});
+  const loadRecommendations = () => {
+    const recs = knowledgeBase.getAllDocuments();
     setRecommendations(recs.slice(0, 4));
   };
 
@@ -74,7 +74,7 @@ const KnowledgeSearch = memo(function KnowledgeSearch({
 
   const handleSuggestionClick = (content: string) => {
     onSuggestionSelect(content);
-    knowledgeBase.recordUsage(content);
+    // knowledgeBase.recordUsage(content); // Метод не существует
   };
 
   const formatCategory = (category: string) => {
@@ -151,14 +151,15 @@ const KnowledgeSearch = memo(function KnowledgeSearch({
                       </span>
                     </div>
                     <p className='text-xs text-gray-600 dark:text-gray-400 line-clamp-2'>
-                      {result.relevantChunks[0] ||
+                      {result.highlights[0] ? 
+                        result.highlights[0].replace(/<\/?mark>/g, '') : 
                         result.document.content.substring(0, 120)}
                       ...
                     </p>
                     <div className='flex items-center mt-2'>
                       <Star className='h-3 w-3 text-yellow-500 mr-1' />
                       <span className='text-xs text-gray-500'>
-                        {Math.round(result.similarity * 100)}% совпадение
+                        {Math.round((result.score / 10) * 100)}% совпадение
                       </span>
                     </div>
                   </div>
@@ -210,14 +211,7 @@ const KnowledgeSearch = memo(function KnowledgeSearch({
                           {tag}
                         </span>
                       ))}
-                      {doc.useCount > 0 && (
-                        <div className='flex items-center ml-2'>
-                          <TrendingUp className='h-3 w-3 text-green-500 mr-1' />
-                          <span className='text-xs text-green-600 dark:text-green-400'>
-                            {doc.useCount}
-                          </span>
-                        </div>
-                      )}
+                      {/* useCount property doesn't exist in Document interface */}
                     </div>
                   </div>
                   <ExternalLink className='h-3 w-3 text-gray-400' />

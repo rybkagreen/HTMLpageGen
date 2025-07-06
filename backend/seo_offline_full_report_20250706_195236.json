@@ -1,0 +1,680 @@
+{
+  "timestamp": "2025-07-06T19:52:36.252803",
+  "summary": {
+    "total_tests": 3,
+    "successful": 3,
+    "failed": 0,
+    "average_score": 76.08,
+    "grade_distribution": {
+      "A": 2,
+      "D": 1
+    }
+  },
+  "results": [
+    {
+      "file_path": "good_seo_test.html",
+      "timestamp": "2025-07-06T19:52:36.236772",
+      "load_time": 0.0,
+      "content_length": 2664,
+      "analysis": {
+        "title": {
+          "exists": true,
+          "content": "Руководство по SEO оптимизации - Полное руководство 2024",
+          "length": 56,
+          "word_count": 8,
+          "unique_words": 7,
+          "issues": [],
+          "score": 100
+        },
+        "meta_description": {
+          "exists": true,
+          "content": "Изучите основы SEO оптимизации: от технического SEO до создания контента. Пошаговое руководство для начинающих и профессионалов.",
+          "length": 128,
+          "issues": [],
+          "score": 100
+        },
+        "meta_viewport": {
+          "exists": true,
+          "content": "width=device-width, initial-scale=1.0",
+          "issues": [],
+          "score": 100
+        },
+        "headings": {
+          "structure": {
+            "h1": {
+              "count": 1,
+              "content": [
+                "Полное руководство по SEO оптимизации в 2024 году"
+              ]
+            },
+            "h2": {
+              "count": 3,
+              "content": [
+                "Что такое SEO и почему это важно",
+                "Основы технического SEO",
+                "Контентная стратегия"
+              ]
+            },
+            "h3": {
+              "count": 2,
+              "content": [
+                "Оптимизация скорости загрузки",
+                "Мобильная оптимизация"
+              ]
+            },
+            "h4": {
+              "count": 0,
+              "content": []
+            },
+            "h5": {
+              "count": 0,
+              "content": []
+            },
+            "h6": {
+              "count": 0,
+              "content": []
+            }
+          },
+          "total_headings": 6,
+          "issues": [],
+          "score": 100
+        },
+        "images": {
+          "total_images": 2,
+          "images_with_alt": 2,
+          "images_without_alt": 0,
+          "images_with_title": 0,
+          "images_with_lazy_loading": 0,
+          "issues": [],
+          "score": 100
+        },
+        "links": {
+          "total_links": 3,
+          "internal_links": 2,
+          "external_links": 1,
+          "empty_anchor_links": 0,
+          "nofollow_links": 0,
+          "issues": [
+            "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам"
+          ],
+          "score": 95
+        },
+        "structured_data": {
+          "json_ld_count": 0,
+          "valid_schemas": 0,
+          "schema_types": [],
+          "microdata_count": 0,
+          "open_graph_count": 0,
+          "errors": [],
+          "issues": [
+            "Отсутствует JSON-LD разметка",
+            "Отсутствует Open Graph разметка"
+          ],
+          "score": 50
+        },
+        "technical": {
+          "has_doctype": true,
+          "has_charset": true,
+          "has_canonical": false,
+          "has_robots_meta": false,
+          "issues": [
+            "Отсутствует canonical URL"
+          ],
+          "score": 90
+        },
+        "content_quality": {
+          "word_count": 228,
+          "sentence_count": 17,
+          "avg_sentence_length": 13.4,
+          "readability_score": 100,
+          "top_keywords": [
+            [
+              "руководство",
+              4
+            ],
+            [
+              "оптимизация",
+              4
+            ],
+            [
+              "стратегия",
+              4
+            ],
+            [
+              "загрузки",
+              3
+            ],
+            [
+              "оптимизации",
+              2
+            ],
+            [
+              "полное",
+              2
+            ],
+            [
+              "2024",
+              2
+            ],
+            [
+              "сайта",
+              2
+            ],
+            [
+              "является",
+              2
+            ],
+            [
+              "скорость",
+              2
+            ]
+          ],
+          "keyword_density": 0.7850877192982456,
+          "issues": [
+            "Недостаточно контента (менее 300 слов)"
+          ],
+          "score": 60
+        },
+        "open_graph": {
+          "tags": {
+            "title": {
+              "exists": false,
+              "content": ""
+            },
+            "description": {
+              "exists": false,
+              "content": ""
+            },
+            "image": {
+              "exists": false,
+              "content": ""
+            },
+            "url": {
+              "exists": false,
+              "content": ""
+            },
+            "type": {
+              "exists": false,
+              "content": ""
+            }
+          },
+          "total_found": 0,
+          "issues": [
+            "Отсутствует og:title",
+            "Отсутствует og:description",
+            "Отсутствует og:image",
+            "Отсутствует og:url",
+            "Отсутствует og:type"
+          ],
+          "score": 0
+        },
+        "lang_attribute": {
+          "exists": true,
+          "value": "ru",
+          "issues": [],
+          "score": 100
+        }
+      },
+      "seo_score": 88.73,
+      "recommendations": [
+        "🟢 УЛУЧШЕНИЕ: Увеличьте объем и качество контента (300+ слов)",
+        "🟢 УЛУЧШЕНИЕ: Добавьте Open Graph теги для социальных сетей"
+      ],
+      "issues": [
+        "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам",
+        "Отсутствует JSON-LD разметка",
+        "Отсутствует Open Graph разметка",
+        "Отсутствует canonical URL",
+        "Недостаточно контента (менее 300 слов)",
+        "Отсутствует og:title",
+        "Отсутствует og:description",
+        "Отсутствует og:image",
+        "Отсутствует og:url",
+        "Отсутствует og:type"
+      ],
+      "grade": "A"
+    },
+    {
+      "file_path": "bad_seo_test.html",
+      "timestamp": "2025-07-06T19:52:36.244996",
+      "load_time": 0.0,
+      "content_length": 245,
+      "analysis": {
+        "title": {
+          "exists": true,
+          "content": "T",
+          "length": 1,
+          "word_count": 1,
+          "unique_words": 1,
+          "issues": [
+            "Title слишком короткий (менее 30 символов)"
+          ],
+          "score": 70
+        },
+        "meta_description": {
+          "exists": false,
+          "content": "",
+          "length": 0,
+          "issues": [
+            "Отсутствует meta description"
+          ],
+          "score": 0
+        },
+        "meta_viewport": {
+          "exists": false,
+          "content": "",
+          "issues": [
+            "Отсутствует meta viewport"
+          ],
+          "score": 0
+        },
+        "headings": {
+          "structure": {
+            "h1": {
+              "count": 0,
+              "content": []
+            },
+            "h2": {
+              "count": 1,
+              "content": [
+                "No H1 here"
+              ]
+            },
+            "h3": {
+              "count": 0,
+              "content": []
+            },
+            "h4": {
+              "count": 0,
+              "content": []
+            },
+            "h5": {
+              "count": 0,
+              "content": []
+            },
+            "h6": {
+              "count": 0,
+              "content": []
+            }
+          },
+          "total_headings": 1,
+          "issues": [
+            "Отсутствует H1 заголовок"
+          ],
+          "score": 60
+        },
+        "images": {
+          "total_images": 2,
+          "images_with_alt": 1,
+          "images_without_alt": 1,
+          "images_with_title": 0,
+          "images_with_lazy_loading": 0,
+          "issues": [
+            "1 изображений без alt атрибута"
+          ],
+          "score": 90
+        },
+        "links": {
+          "total_links": 1,
+          "internal_links": 0,
+          "external_links": 1,
+          "empty_anchor_links": 0,
+          "nofollow_links": 0,
+          "issues": [
+            "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам"
+          ],
+          "score": 95
+        },
+        "structured_data": {
+          "json_ld_count": 0,
+          "valid_schemas": 0,
+          "schema_types": [],
+          "microdata_count": 0,
+          "open_graph_count": 0,
+          "errors": [],
+          "issues": [
+            "Отсутствует JSON-LD разметка",
+            "Отсутствует Open Graph разметка"
+          ],
+          "score": 50
+        },
+        "technical": {
+          "has_doctype": true,
+          "has_charset": false,
+          "has_canonical": false,
+          "has_robots_meta": false,
+          "issues": [
+            "Не указана кодировка UTF-8",
+            "Отсутствует canonical URL"
+          ],
+          "score": 75
+        },
+        "content_quality": {
+          "word_count": 8,
+          "sentence_count": 2,
+          "avg_sentence_length": 4.0,
+          "readability_score": 100,
+          "top_keywords": [
+            [
+              "here",
+              1
+            ],
+            [
+              "short",
+              1
+            ],
+            [
+              "content",
+              1
+            ],
+            [
+              "external",
+              1
+            ],
+            [
+              "link",
+              1
+            ]
+          ],
+          "keyword_density": 1.0,
+          "issues": [
+            "Недостаточно контента (менее 300 слов)"
+          ],
+          "score": 60
+        },
+        "open_graph": {
+          "tags": {
+            "title": {
+              "exists": false,
+              "content": ""
+            },
+            "description": {
+              "exists": false,
+              "content": ""
+            },
+            "image": {
+              "exists": false,
+              "content": ""
+            },
+            "url": {
+              "exists": false,
+              "content": ""
+            },
+            "type": {
+              "exists": false,
+              "content": ""
+            }
+          },
+          "total_found": 0,
+          "issues": [
+            "Отсутствует og:title",
+            "Отсутствует og:description",
+            "Отсутствует og:image",
+            "Отсутствует og:url",
+            "Отсутствует og:type"
+          ],
+          "score": 0
+        },
+        "lang_attribute": {
+          "exists": false,
+          "value": "",
+          "issues": [
+            "Отсутствует атрибут lang в теге html"
+          ],
+          "score": 0
+        }
+      },
+      "seo_score": 50.78,
+      "recommendations": [
+        "🔴 КРИТИЧНО: Добавьте или улучшите meta description (120-160 символов)",
+        "🔴 КРИТИЧНО: Улучшите структуру заголовков (H1 - один на страницу, добавьте H2-H3)",
+        "🟡 ВАЖНО: Добавьте корректный meta viewport для мобильной адаптации",
+        "🟡 ВАЖНО: Исправьте технические проблемы (DOCTYPE, charset, canonical)",
+        "🟢 УЛУЧШЕНИЕ: Увеличьте объем и качество контента (300+ слов)",
+        "🟢 УЛУЧШЕНИЕ: Добавьте Open Graph теги для социальных сетей"
+      ],
+      "issues": [
+        "Title слишком короткий (менее 30 символов)",
+        "Отсутствует meta description",
+        "Отсутствует meta viewport",
+        "Отсутствует H1 заголовок",
+        "1 изображений без alt атрибута",
+        "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам",
+        "Отсутствует JSON-LD разметка",
+        "Отсутствует Open Graph разметка",
+        "Не указана кодировка UTF-8",
+        "Отсутствует canonical URL",
+        "Недостаточно контента (менее 300 слов)",
+        "Отсутствует og:title",
+        "Отсутствует og:description",
+        "Отсутствует og:image",
+        "Отсутствует og:url",
+        "Отсутствует og:type",
+        "Отсутствует атрибут lang в теге html"
+      ],
+      "grade": "D"
+    },
+    {
+      "file_path": "ecommerce_test.html",
+      "timestamp": "2025-07-06T19:52:36.246889",
+      "load_time": 0.0,
+      "content_length": 1589,
+      "analysis": {
+        "title": {
+          "exists": true,
+          "content": "Купить смартфоны недорого - Интернет-магазин",
+          "length": 44,
+          "word_count": 5,
+          "unique_words": 5,
+          "issues": [],
+          "score": 100
+        },
+        "meta_description": {
+          "exists": true,
+          "content": "Большой выбор смартфонов по выгодным ценам. Быстрая доставка, гарантия качества. Заказывайте онлайн в нашем интернет-магазине!",
+          "length": 126,
+          "issues": [],
+          "score": 100
+        },
+        "meta_viewport": {
+          "exists": true,
+          "content": "width=device-width, initial-scale=1.0",
+          "issues": [],
+          "score": 100
+        },
+        "headings": {
+          "structure": {
+            "h1": {
+              "count": 1,
+              "content": [
+                "Смартфоны - купить с доставкой по России"
+              ]
+            },
+            "h2": {
+              "count": 2,
+              "content": [
+                "Популярные модели смартфонов",
+                "Почему выбирают нас"
+              ]
+            },
+            "h3": {
+              "count": 2,
+              "content": [
+                "iPhone 15 Pro Max",
+                "Samsung Galaxy S24 Ultra"
+              ]
+            },
+            "h4": {
+              "count": 0,
+              "content": []
+            },
+            "h5": {
+              "count": 0,
+              "content": []
+            },
+            "h6": {
+              "count": 0,
+              "content": []
+            }
+          },
+          "total_headings": 5,
+          "issues": [],
+          "score": 100
+        },
+        "images": {
+          "total_images": 2,
+          "images_with_alt": 2,
+          "images_without_alt": 0,
+          "images_with_title": 0,
+          "images_with_lazy_loading": 0,
+          "issues": [],
+          "score": 100
+        },
+        "links": {
+          "total_links": 3,
+          "internal_links": 2,
+          "external_links": 1,
+          "empty_anchor_links": 0,
+          "nofollow_links": 0,
+          "issues": [
+            "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам"
+          ],
+          "score": 95
+        },
+        "structured_data": {
+          "json_ld_count": 0,
+          "valid_schemas": 0,
+          "schema_types": [],
+          "microdata_count": 0,
+          "open_graph_count": 0,
+          "errors": [],
+          "issues": [
+            "Отсутствует JSON-LD разметка",
+            "Отсутствует Open Graph разметка"
+          ],
+          "score": 50
+        },
+        "technical": {
+          "has_doctype": true,
+          "has_charset": true,
+          "has_canonical": false,
+          "has_robots_meta": false,
+          "issues": [
+            "Отсутствует canonical URL"
+          ],
+          "score": 90
+        },
+        "content_quality": {
+          "word_count": 111,
+          "sentence_count": 9,
+          "avg_sentence_length": 12.3,
+          "readability_score": 100,
+          "top_keywords": [
+            [
+              "смартфоны",
+              3
+            ],
+            [
+              "купить",
+              2
+            ],
+            [
+              "интернетмагазин",
+              2
+            ],
+            [
+              "россии",
+              2
+            ],
+            [
+              "смартфонов",
+              2
+            ],
+            [
+              "камерой",
+              2
+            ],
+            [
+              "доставка",
+              2
+            ],
+            [
+              "недорого",
+              1
+            ],
+            [
+              "доставкой",
+              1
+            ],
+            [
+              "популярные",
+              1
+            ]
+          ],
+          "keyword_density": 0.8558558558558559,
+          "issues": [
+            "Недостаточно контента (менее 300 слов)"
+          ],
+          "score": 60
+        },
+        "open_graph": {
+          "tags": {
+            "title": {
+              "exists": false,
+              "content": ""
+            },
+            "description": {
+              "exists": false,
+              "content": ""
+            },
+            "image": {
+              "exists": false,
+              "content": ""
+            },
+            "url": {
+              "exists": false,
+              "content": ""
+            },
+            "type": {
+              "exists": false,
+              "content": ""
+            }
+          },
+          "total_found": 0,
+          "issues": [
+            "Отсутствует og:title",
+            "Отсутствует og:description",
+            "Отсутствует og:image",
+            "Отсутствует og:url",
+            "Отсутствует og:type"
+          ],
+          "score": 0
+        },
+        "lang_attribute": {
+          "exists": true,
+          "value": "ru",
+          "issues": [],
+          "score": 100
+        }
+      },
+      "seo_score": 88.73,
+      "recommendations": [
+        "🟢 УЛУЧШЕНИЕ: Увеличьте объем и качество контента (300+ слов)",
+        "🟢 УЛУЧШЕНИЕ: Добавьте Open Graph теги для социальных сетей"
+      ],
+      "issues": [
+        "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам",
+        "Отсутствует JSON-LD разметка",
+        "Отсутствует Open Graph разметка",
+        "Отсутствует canonical URL",
+        "Недостаточно контента (менее 300 слов)",
+        "Отсутствует og:title",
+        "Отсутствует og:description",
+        "Отсутствует og:image",
+        "Отсутствует og:url",
+        "Отсутствует og:type"
+      ],
+      "grade": "A"
+    }
+  ]
+}

@@ -102,6 +102,14 @@ class AIService:
         """
         return await self.provider.chat_completion(messages)
 
+    async def generate_structured_data(
+        self, content: str, schema_type: str, **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Generate structured data for content
+        """
+        return await self.provider.generate_structured_data(content, schema_type, **kwargs)
+
     def get_provider_info(self) -> Dict[str, Any]:
         """Получить информацию о текущем провайдере"""
         provider_name = type(self.provider).__name__

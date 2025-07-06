@@ -8,6 +8,8 @@ from app.core.config import settings
 from app.modules.ai_integration.service import AIService
 from app.modules.plugins.manager import PluginManager
 from app.modules.seo.service import SEOService
+from app.modules.seo.integrator import SEOIntegrator
+from app.modules.structured_data.generator import StructuredDataGenerator
 
 
 class PageGeneratorService:
@@ -15,6 +17,7 @@ class PageGeneratorService:
         self.templates_dir = "templates"
         self.jinja_env = Environment(loader=FileSystemLoader(self.templates_dir))
         self.seo_service = SEOService()
+        self.seo_integrator = SEOIntegrator()
 
         # Initialize plugin manager with default plugins
         self.plugin_manager = PluginManager()
@@ -46,6 +49,12 @@ class PageGeneratorService:
         plugins: Optional[List[str]] = None,
         ai_enhancements: bool = True,
         ai_service: Optional[AIService] = None,
+        auto_seo: bool = True,
+        target_keywords: Optional[List[str]] = None,
+        target_audience: str = "general",
+        structured_data: bool = True,
+        structured_data_types: Optional[List[str]] = None,
+        structured_data_params: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Generate HTML page from content
@@ -76,8 +85,63 @@ class PageGeneratorService:
                     html, plugins, plugin_options
                 )
 
-            # Step 5: SEO Analysis
-            seo_analysis = self.seo_service.analyze_html(html)
+            # Step 5: Автоматическая SEO оптимизация
+            if auto_seo:
+                content_context = self._prepare_content_context(
+                    enhanced_content, meta_tags, seo_options
+                )
+                
+                seo_integration_result = self.seo_integrator.integrate_seo_recommendations(
+                    html=html,
+                    content_context=content_context,
+                    target_keywords=target_keywords,
+                    target_audience=target_audience,
+                    auto_apply=True
+                )
+                
+                html = seo_integration_result["optimized_html"]
+                seo_analysis = seo_integration_result["final_analysis"]
+                seo_improvements = seo_integration_result["improvements_applied"]
+            else:
+                seo_analysis = self.seo_service.analyze_html(html)
+                seo_improvements = {"total_improvements": 0, "improvements_list": []}
+
+            # Step 6: Генерация структурированных данных
+            structured_data_info = {"schemas_added": 0, "schemas_list": []}
+            if structured_data and ai_service:
+                try:
+                    structured_data_generator = StructuredDataGenerator(ai_service)
+                    
+                    if structured_data_types:
+                        # Генерируем конкретные типы схем
+                        for schema_type in structured_data_types:
+                            schema_params = structured_data_params.get(schema_type, {}) if structured_data_params else {}
+                            schema = await structured_data_generator.generate_structured_data(
+                                schema_type=schema_type,
+                                content=enhanced_content,
+                                data=schema_params,
+                                auto_extract=True
+                            )
+                            if schema:
+                                html = structured_data_generator.inject_into_html(html, schema)
+                                structured_data_info["schemas_added"] += 1
+                                structured_data_info["schemas_list"].append(schema_type)
+                    else:
+                        # Автоматическое определение и генерация подходящих схем
+                        html = await structured_data_generator.auto_generate_for_content(
+                            html=html,
+                            content_type="auto"
+                        )
+                        # Пытаемся определить сколько схем было добавлено
+                        from bs4 import BeautifulSoup
+                        soup = BeautifulSoup(html, 'html.parser')
+                        ld_scripts = soup.find_all('script', {'type': 'application/ld+json'})
+                        structured_data_info["schemas_added"] = len(ld_scripts)
+                        structured_data_info["schemas_list"] = ["auto-detected"]
+                        
+                except Exception as e:
+                    print(f"Ошибка генерации структурированных данных: {e}")
+                    structured_data_info = {"schemas_added": 0, "schemas_list": [], "error": str(e)}
 
             generation_time = time.time() - start_time
 
@@ -87,11 +151,15 @@ class PageGeneratorService:
                     "generation_time": generation_time,
                     "template_used": template,
                     "ai_enhanced": ai_enhancements,
-                    "seo_score": seo_analysis["score"],
-                    "word_count": seo_analysis["content"]["word_count"],
+                    "seo_optimized": auto_seo,
+                    "seo_score": seo_analysis["overall_score"],
+                    "word_count": seo_analysis["analysis"]["keywords"]["total_words"] if auto_seo else seo_analysis.get("content", {}).get("word_count", 0),
                     "meta_tags": meta_tags,
+                    "seo_improvements": seo_improvements["improvements_list"] if auto_seo else [],
+                    "structured_data": structured_data_info,
                 },
                 "plugins_applied": applied_plugins,
+                "seo_recommendations": seo_analysis["recommendations"] if auto_seo else [],
                 "generation_time": generation_time,
             }
 
@@ -250,3 +318,32 @@ class PageGeneratorService:
                 "description": "Portfolio/showcase template",
             },
         ]
+    
+    def _prepare_content_context(
+        self, 
+        content: str, 
+        meta_tags: Dict[str, str], 
+        seo_options: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """Подготовка контекста контента для SEO анализа"""
+        if seo_options is None:
+            seo_options = {}
+        
+        # Извлекаем первые несколько предложений как excerpt
+        sentences = content.split('. ')[:2]
+        excerpt = '. '.join(sentences) + '.' if sentences else content[:160]
+        
+        return {
+            "title": meta_tags.get("title", seo_options.get("title", "")),
+            "description": meta_tags.get("description", seo_options.get("description", "")),
+            "excerpt": excerpt,
+            "type": seo_options.get("type", "webpage"),
+            "author": seo_options.get("author", ""),
+            "category": seo_options.get("category", ""),
+            "url": seo_options.get("url", ""),
+            "image": seo_options.get("image", ""),
+            "site_name": seo_options.get("site_name", ""),
+            "date_published": seo_options.get("date_published", ""),
+            "date_modified": seo_options.get("date_modified", ""),
+            "breadcrumbs": seo_options.get("breadcrumbs", [])
+        }

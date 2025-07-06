@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-07-06T19:50:09.745018",
+  "summary": {
+    "total_tests": 3,
+    "successful": 0,
+    "failed": 3,
+    "average_score": 0
+  },
+  "results": [
+    {
+      "url": "http://localhost:8000/good_seo_test.html",
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=10)",
+      "timestamp": "2025-07-06T19:49:49.720488"
+    },
+    {
+      "url": "http://localhost:8000/bad_seo_test.html",
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=10)",
+      "timestamp": "2025-07-06T19:49:59.732595"
+    },
+    {
+      "url": "http://localhost:8000/ecommerce_test.html",
+      "error": "HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=10)",
+      "timestamp": "2025-07-06T19:50:09.744809"
+    }
+  ]
+}

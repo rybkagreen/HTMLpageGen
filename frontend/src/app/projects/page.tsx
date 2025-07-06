@@ -1,6 +1,6 @@
 'use client';
 
-import ProjectManagerComponent from '@/components/projects/ProjectManager';
+import ProjectManagerSimple from '@/components/projects/ProjectManagerSimple';
 import { Project } from '@/lib/project-manager';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -25,7 +25,7 @@ export default function ProjectsPage() {
         animate={{ opacity: 1, y: 0 }}
         className='h-screen'
       >
-        <ProjectManagerComponent
+        <ProjectManagerSimple
           onProjectSelect={handleProjectSelect}
           onProjectCreate={handleProjectCreate}
         />

@@ -2,11 +2,16 @@ import re
 from typing import Any, Dict, List, Optional
 
 from bs4 import BeautifulSoup
+from .open_graph_analyzer import OpenGraphAnalyzer
+from .twitter_cards_analyzer import TwitterCardsAnalyzer
+from .performance_analyzer import PerformanceAnalyzer
 
 
 class SEOService:
     def __init__(self):
-        pass
+        self.og_analyzer = OpenGraphAnalyzer()
+        self.twitter_analyzer = TwitterCardsAnalyzer()
+        self.performance_analyzer = PerformanceAnalyzer()
 
     def analyze_html(self, html: str) -> Dict[str, Any]:
         """
@@ -14,20 +19,49 @@ class SEOService:
         """
         soup = BeautifulSoup(html, "html.parser")
 
-        analysis = {
+        # Базовый SEO анализ
+        basic_analysis = {
             "title": self._analyze_title(soup),
             "meta_description": self._analyze_meta_description(soup),
             "headings": self._analyze_headings(soup),
             "images": self._analyze_images(soup),
             "links": self._analyze_links(soup),
             "content": self._analyze_content(soup),
+        }
+
+        # Анализ Open Graph
+        og_analysis = self.og_analyzer.analyze_open_graph(html)
+        
+        # Анализ Twitter Cards
+        twitter_analysis = self.twitter_analyzer.analyze_twitter_cards(html)
+        
+        # Анализ производительности
+        performance_analysis = self.performance_analyzer.analyze_performance(html)
+        
+        # Объединение всех анализов
+        analysis = {
+            **basic_analysis,
+            "open_graph": og_analysis,
+            "twitter_cards": twitter_analysis,
+            "performance": performance_analysis,
             "score": 0,
             "issues": [],
             "recommendations": [],
         }
 
+        # Сбор всех проблем
+        analysis["issues"].extend(self._collect_basic_issues(basic_analysis))
+        analysis["issues"].extend(og_analysis.get("issues", []))
+        analysis["issues"].extend(twitter_analysis.get("issues", []))
+        
+        # Сбор всех рекомендаций
+        analysis["recommendations"].extend(self._generate_basic_recommendations(basic_analysis))
+        analysis["recommendations"].extend(og_analysis.get("recommendations", []))
+        analysis["recommendations"].extend(twitter_analysis.get("recommendations", []))
+        analysis["recommendations"].extend(performance_analysis.get("recommendations", []))
+
         # Calculate overall score
-        analysis["score"] = self._calculate_seo_score(analysis)
+        analysis["score"] = self._calculate_enhanced_seo_score(analysis)
 
         return analysis
 
@@ -198,6 +232,79 @@ class SEOService:
             score -= 10
 
         return max(0, score)
+    
+    def _collect_basic_issues(self, basic_analysis: Dict[str, Any]) -> List[str]:
+        """Сбор проблем из базового анализа"""
+        issues = []
+        
+        # Проблемы с title
+        issues.extend(basic_analysis["title"].get("issues", []))
+        
+        # Проблемы с meta description
+        issues.extend(basic_analysis["meta_description"].get("issues", []))
+        
+        # Проблемы с заголовками
+        issues.extend(basic_analysis["headings"].get("issues", []))
+        
+        # Проблемы с изображениями
+        issues.extend(basic_analysis["images"].get("issues", []))
+        
+        # Проблемы с контентом
+        issues.extend(basic_analysis["content"].get("issues", []))
+        
+        return issues
+    
+    def _generate_basic_recommendations(self, basic_analysis: Dict[str, Any]) -> List[str]:
+        """Генерация рекомендаций из базового анализа"""
+        recommendations = []
+        
+        # Title рекомендации
+        if not basic_analysis["title"]["exists"]:
+            recommendations.append("Добавьте title тег на страницу")
+        elif basic_analysis["title"]["issues"]:
+            recommendations.append("Оптимизируйте title тег")
+        
+        # Meta description рекомендации
+        if not basic_analysis["meta_description"]["exists"]:
+            recommendations.append("Добавьте meta description")
+        elif basic_analysis["meta_description"]["issues"]:
+            recommendations.append("Оптимизируйте meta description")
+        
+        # Заголовки рекомендации
+        if basic_analysis["headings"]["issues"]:
+            recommendations.append("Улучшите структуру заголовков")
+        
+        # Изображения рекомендации
+        if basic_analysis["images"]["issues"]:
+            recommendations.append("Оптимизируйте изображения (добавьте alt атрибуты)")
+        
+        # Контент рекомендации
+        if basic_analysis["content"]["issues"]:
+            recommendations.append("Увеличьте объем качественного контента")
+        
+        return recommendations
+    
+    def _calculate_enhanced_seo_score(self, analysis: Dict[str, Any]) -> int:
+        """Расчет улучшенной SEO оценки с учетом всех факторов"""
+        score = 100
+        
+        # Базовый SEO анализ (40% от общей оценки)
+        basic_score = self._calculate_seo_score(analysis)
+        score = basic_score * 0.4
+        
+        # Open Graph (20% от общей оценки)
+        og_score = analysis["open_graph"].get("score", 0)
+        score += og_score * 0.2
+        
+        # Twitter Cards (15% от общей оценки)
+        twitter_score = analysis["twitter_cards"].get("score", 0)
+        score += twitter_score * 0.15
+        
+        # Производительность (25% от общей оценки)
+        performance_score = analysis["performance"].get("performance_score", 0)
+        score += performance_score * 0.25
+        
+        return max(0, min(100, int(score)))
 
     def generate_structured_data(self, content_type: str, data: Dict[str, Any]) -> str:
         """

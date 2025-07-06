@@ -15,6 +15,9 @@ class PageGenerationRequest(BaseModel):
     seo_options: Optional[Dict[str, Any]] = None
     plugins: Optional[List[str]] = None
     ai_enhancements: Optional[bool] = True
+    structured_data: Optional[bool] = True
+    structured_data_types: Optional[List[str]] = None
+    structured_data_params: Optional[Dict[str, Any]] = None
 
 
 class PageGenerationResponse(BaseModel):
@@ -43,6 +46,11 @@ async def generate_page(
                 request.ai_enhancements if request.ai_enhancements is not None else True
             ),
             ai_service=ai_service,
+            structured_data=(
+                request.structured_data if request.structured_data is not None else True
+            ),
+            structured_data_types=request.structured_data_types,
+            structured_data_params=request.structured_data_params,
         )
         return result
     except Exception as e:

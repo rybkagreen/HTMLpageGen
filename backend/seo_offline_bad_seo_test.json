@@ -1,0 +1,220 @@
+{
+  "file_path": "bad_seo_test.html",
+  "timestamp": "2025-07-06T19:52:36.244996",
+  "load_time": 0.0,
+  "content_length": 245,
+  "analysis": {
+    "title": {
+      "exists": true,
+      "content": "T",
+      "length": 1,
+      "word_count": 1,
+      "unique_words": 1,
+      "issues": [
+        "Title слишком короткий (менее 30 символов)"
+      ],
+      "score": 70
+    },
+    "meta_description": {
+      "exists": false,
+      "content": "",
+      "length": 0,
+      "issues": [
+        "Отсутствует meta description"
+      ],
+      "score": 0
+    },
+    "meta_viewport": {
+      "exists": false,
+      "content": "",
+      "issues": [
+        "Отсутствует meta viewport"
+      ],
+      "score": 0
+    },
+    "headings": {
+      "structure": {
+        "h1": {
+          "count": 0,
+          "content": []
+        },
+        "h2": {
+          "count": 1,
+          "content": [
+            "No H1 here"
+          ]
+        },
+        "h3": {
+          "count": 0,
+          "content": []
+        },
+        "h4": {
+          "count": 0,
+          "content": []
+        },
+        "h5": {
+          "count": 0,
+          "content": []
+        },
+        "h6": {
+          "count": 0,
+          "content": []
+        }
+      },
+      "total_headings": 1,
+      "issues": [
+        "Отсутствует H1 заголовок"
+      ],
+      "score": 60
+    },
+    "images": {
+      "total_images": 2,
+      "images_with_alt": 1,
+      "images_without_alt": 1,
+      "images_with_title": 0,
+      "images_with_lazy_loading": 0,
+      "issues": [
+        "1 изображений без alt атрибута"
+      ],
+      "score": 90
+    },
+    "links": {
+      "total_links": 1,
+      "internal_links": 0,
+      "external_links": 1,
+      "empty_anchor_links": 0,
+      "nofollow_links": 0,
+      "issues": [
+        "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам"
+      ],
+      "score": 95
+    },
+    "structured_data": {
+      "json_ld_count": 0,
+      "valid_schemas": 0,
+      "schema_types": [],
+      "microdata_count": 0,
+      "open_graph_count": 0,
+      "errors": [],
+      "issues": [
+        "Отсутствует JSON-LD разметка",
+        "Отсутствует Open Graph разметка"
+      ],
+      "score": 50
+    },
+    "technical": {
+      "has_doctype": true,
+      "has_charset": false,
+      "has_canonical": false,
+      "has_robots_meta": false,
+      "issues": [
+        "Не указана кодировка UTF-8",
+        "Отсутствует canonical URL"
+      ],
+      "score": 75
+    },
+    "content_quality": {
+      "word_count": 8,
+      "sentence_count": 2,
+      "avg_sentence_length": 4.0,
+      "readability_score": 100,
+      "top_keywords": [
+        [
+          "here",
+          1
+        ],
+        [
+          "short",
+          1
+        ],
+        [
+          "content",
+          1
+        ],
+        [
+          "external",
+          1
+        ],
+        [
+          "link",
+          1
+        ]
+      ],
+      "keyword_density": 1.0,
+      "issues": [
+        "Недостаточно контента (менее 300 слов)"
+      ],
+      "score": 60
+    },
+    "open_graph": {
+      "tags": {
+        "title": {
+          "exists": false,
+          "content": ""
+        },
+        "description": {
+          "exists": false,
+          "content": ""
+        },
+        "image": {
+          "exists": false,
+          "content": ""
+        },
+        "url": {
+          "exists": false,
+          "content": ""
+        },
+        "type": {
+          "exists": false,
+          "content": ""
+        }
+      },
+      "total_found": 0,
+      "issues": [
+        "Отсутствует og:title",
+        "Отсутствует og:description",
+        "Отсутствует og:image",
+        "Отсутствует og:url",
+        "Отсутствует og:type"
+      ],
+      "score": 0
+    },
+    "lang_attribute": {
+      "exists": false,
+      "value": "",
+      "issues": [
+        "Отсутствует атрибут lang в теге html"
+      ],
+      "score": 0
+    }
+  },
+  "seo_score": 50.78,
+  "recommendations": [
+    "🔴 КРИТИЧНО: Добавьте или улучшите meta description (120-160 символов)",
+    "🔴 КРИТИЧНО: Улучшите структуру заголовков (H1 - один на страницу, добавьте H2-H3)",
+    "🟡 ВАЖНО: Добавьте корректный meta viewport для мобильной адаптации",
+    "🟡 ВАЖНО: Исправьте технические проблемы (DOCTYPE, charset, canonical)",
+    "🟢 УЛУЧШЕНИЕ: Увеличьте объем и качество контента (300+ слов)",
+    "🟢 УЛУЧШЕНИЕ: Добавьте Open Graph теги для социальных сетей"
+  ],
+  "issues": [
+    "Title слишком короткий (менее 30 символов)",
+    "Отсутствует meta description",
+    "Отсутствует meta viewport",
+    "Отсутствует H1 заголовок",
+    "1 изображений без alt атрибута",
+    "Рекомендуется добавить rel=\"nofollow\" к внешним ссылкам",
+    "Отсутствует JSON-LD разметка",
+    "Отсутствует Open Graph разметка",
+    "Не указана кодировка UTF-8",
+    "Отсутствует canonical URL",
+    "Недостаточно контента (менее 300 слов)",
+    "Отсутствует og:title",
+    "Отсутствует og:description",
+    "Отсутствует og:image",
+    "Отсутствует og:url",
+    "Отсутствует og:type",
+    "Отсутствует атрибут lang в теге html"
+  ],
+  "grade": "D"
+}
